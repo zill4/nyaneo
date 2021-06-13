@@ -10,9 +10,9 @@ OBJ_NAME = game
 # dev : $(OBJS)
 # 	g++ $(OBJS) -w -lSDL2 -o $(OBJ_NAME) -I includes
 
-all : $(OBJS)
+dev : $(OBJS)
 	emcc -o app.html $(OBJS) -Wall -I includes -g -lm -s USE_SDL=2 
 	python3 -m http.server
-	
+
 clean :
-	rm -r app.js app.html game app.wasm
+	rm -r app.js app.html app.wasm
