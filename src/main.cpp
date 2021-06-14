@@ -2,6 +2,7 @@
 *   The entry point of the program.
 */
 #include "game.h"
+#include "input.h"
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
 #endif

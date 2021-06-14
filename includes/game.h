@@ -12,6 +12,8 @@ class Game
     private:
         Graphics _graphics;
         void gameLoop();
+        void update(float elapsedtime);
+        void draw(Graphics &graphics);
 };
 
 #endif
