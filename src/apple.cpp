@@ -3,28 +3,29 @@
 #include "main.h"
 #include "apple.h"
 
+SDL_Rect apple;
 
+void generate_new_apple_pos(void);
 
-
-void Apple::render_apple(Graphics *graphics)
+void render_apple()
 {
-    SDL_SetRenderDrawColor(graphics->getRenderer(), 226, 106, 106, SDL_ALPHA_OPAQUE);
-    SDL_RenderFillRect(graphics->getRenderer(), &apple);
+    SDL_SetRenderDrawColor(getRenderer(), 226, 106, 106, SDL_ALPHA_OPAQUE);
+    SDL_RenderFillRect(getRenderer(), &apple);
 }
 
-void Apple::generate_new_apple_pos(void)
+void generate_new_apple_pos(void)
 {
-    _apple.x = (rand() % (SCREEN_WIDTH - DEFAULT_APPLE_WIDTH + 1));
-    _apple.y = (rand() % (SCREEN_HEIGHT - DEFAULT_APPLE_HEIGHT + 1));
-    _apple.w = DEFAULT_APPLE_WIDTH;
-    _apple.h = DEFAULT_APPLE_HEIGHT;
+    apple.x = (rand() % (SCREEN_WIDTH - DEFAULT_APPLE_WIDTH + 1));
+    apple.y = (rand() % (SCREEN_HEIGHT - DEFAULT_APPLE_HEIGHT + 1));
+    apple.w = DEFAULT_APPLE_WIDTH;
+    apple.h = DEFAULT_APPLE_HEIGHT;
 }
 
-int Apple::get_apple_posX(void)
+int get_apple_posX(void)
 {
-    return _apple.x;
+    return apple.x;
 }
-int Apple::get_apple_posY(void)
+int get_apple_posY(void)
 {
-    return _apple.y;
+    return apple.y;
 }

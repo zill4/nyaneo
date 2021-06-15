@@ -49,7 +49,7 @@
 NAME = game
 
 #	src / obj files
-SRC	=  main.cpp graphics.cpp game.cpp  input.cpp snake.cpp apple.cpp
+SRC	=  main.cpp snake.cpp apple.cpp
 OBJ	= $(addprefix $(OBJDIR), $(SRC:.cpp=.o))
 
 #	compiler

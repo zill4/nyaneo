@@ -2,16 +2,15 @@
 #include <stdbool.h>
 #include <math.h>
 #include "snake.h"
-// #include "main.h"
+#include "main.h"
 #include "apple.h"
-#include "graphics.h"
 
-// struct Snake snake;
-// struct TailNode *lasttail;
+struct Snake snake;
+struct TailNode *lasttail;
 
-// void push_tail();
+void push_tail();
 
-bool Snake::init_snake()
+bool init_snake()
 {
     // default direction
     snake.dx = -1;
@@ -36,13 +35,13 @@ bool Snake::init_snake()
 }
 
 
-void Snake::render_tail(SDL_Rect *tail, Graphics *graphics)
+void render_tail(SDL_Rect *tail)
 {   // renders individual parts of the snake
-    SDL_SetRenderDrawColor(graphics->getRenderer(), 252, 191, 30, SDL_ALPHA_OPAQUE);
-    SDL_RenderFillRect(graphics->getRenderer(), tail);
+    SDL_SetRenderDrawColor(getRenderer(), 252, 191, 30, SDL_ALPHA_OPAQUE);
+    SDL_RenderFillRect(getRenderer(), tail);
 }
 
-void Snake::check_collision()
+void check_collision()
 {
     // fruit collision
     if(abs(snake.head.rect.x - get_apple_posX()) < DEFAULT_WIDTH && abs(snake.head.rect.y - get_apple_posY()) < DEFAULT_HEIGHT){
@@ -61,32 +60,32 @@ void Snake::check_collision()
         snake.head.rect.y = 0;
 }
 
-void Snake::update_snake(Graphics *graphics)
+void update_snake(void)
 {   // iterates over the head and the tail
     for(struct TailNode *ptr = lasttail; ptr != NULL; ptr = (*ptr).previous){
         if((*ptr).previous == NULL){ // in other words, if this "tail" is the head
             snake.head.rect.x += snake.dx * DEFAULT_WIDTH;
             snake.head.rect.y += snake.dy * DEFAULT_HEIGHT;
         } else { // if it's the snake's body
-            //if(abs(snake.head.rect.x - (*ptr).rect.x) < DEFAULT_WIDTH && // checks collision with the head
-             //  abs(snake.head.rect.y - (*ptr).rect.y) < DEFAULT_HEIGHT)
-               // quit_game();
+            if(abs(snake.head.rect.x - (*ptr).rect.x) < DEFAULT_WIDTH && // checks collision with the head
+              abs(snake.head.rect.y - (*ptr).rect.y) < DEFAULT_HEIGHT)
+               quit_game();
 
             (*ptr).rect.x = (*ptr).previous->rect.x;
             (*ptr).rect.y = (*ptr).previous->rect.y;
         }
 
-        render_tail(&(*ptr).rect, graphics);
+        render_tail(&(*ptr).rect);
     }
 
     check_collision(); // head-only collision (fruit, border, etc.)
 }
 
-void Snake::push_tail()
+void push_tail()
 {   // pushes a new tail inside the linked list
-    struct TailNode *new_tail = (TailNode *) malloc(sizeof(struct TailNode));
-    // if(new_tail == NULL) 
-    //     quit_game();
+    struct TailNode *new_tail = (TailNode*)malloc(sizeof(struct TailNode));
+    if(new_tail == NULL) 
+        quit_game();
 
     (*new_tail).rect.w = DEFAULT_WIDTH;
     (*new_tail).rect.h = DEFAULT_HEIGHT;
@@ -98,7 +97,7 @@ void Snake::push_tail()
     lasttail = new_tail;
 }
 
-void Snake::change_snake_direction(int dir)
+void change_snake_direction(int dir)
 {
     if(dir == RIGHT && snake.dx != -1){
         snake.dx = 1;
@@ -118,7 +117,7 @@ void Snake::change_snake_direction(int dir)
     }
 }
 
-void Snake::free_tails()
+void free_tails()
 {
     struct TailNode *tmp;
     struct TailNode *secondtail;
