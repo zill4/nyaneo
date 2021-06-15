@@ -41,7 +41,7 @@ class Graphics {
 	/* SDL_Renderer* getRenderer
 	 * Returns the renderer
 	 */
-	SDL_Renderer* getRenderer() const;
+	SDL_Renderer* getRenderer() const { return _renderer; }
     private:
         SDL_Window* _window;
         SDL_Renderer* _renderer;
