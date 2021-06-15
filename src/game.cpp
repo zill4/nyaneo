@@ -7,6 +7,7 @@
 #endif
 
 #include <SDL2/SDL.h>
+#include <stdio.h>
 #include "game.h"
 #include "graphics.h"
 #include "input.h"
@@ -18,7 +19,7 @@ namespace {
 
 Game::Game()
 {
-    SDL_Init(SDL_INIT_EVERYTHING);
+    // SDL_Init(SDL_INIT_EVERYTHING);
 }
 
 Game::~Game()
@@ -29,6 +30,7 @@ Game::~Game()
 // TODO: Maybe add variables to start depending on mode.
 void Game::start()
 {
+    
     gameLoop();
     // Assuming that the game loop has ended.
     SDL_Quit();
@@ -42,6 +44,7 @@ void Game::gameLoop()
     Graphics graphics;
     SDL_Event event;
     Input input;
+    int i = 0;
     //Start the game loop
     while (true) 
     {
@@ -50,6 +53,7 @@ void Game::gameLoop()
         {
             if (event.type == SDL_KEYDOWN)
             {
+                return ;
                 if (event.key.repeat == 0)
                 {
                     input.keyDownEvent(event);
@@ -63,7 +67,9 @@ void Game::gameLoop()
             }
         }
         //this->_graphics = graphics;
-        // SDL_Delay(70);
+        printf("Running %i", i);
+        i++;
+        SDL_Delay(70);
     }
 }
 

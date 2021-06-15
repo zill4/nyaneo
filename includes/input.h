@@ -7,8 +7,6 @@
 class Input
 {
     public:
-        Input();
-        ~Input();
 
         void beginNewFrame();
         void keyUpEvent(const SDL_Event& event);
