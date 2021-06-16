@@ -1,4 +1,4 @@
-# nyaneo
+# nyaneo : Emscripten/G++ Branch
 Isometric ARPG
 
 # Dependencies
