@@ -1,0 +1,2 @@
+C:\Users\justc\source\repos\zill4\nyaneo\nyaneo_game\Debug\nyaneo_game.exe
+C:\Users\justc\source\repos\zill4\nyaneo\nyaneo_game\Debug\nyaneo_game.pdb
