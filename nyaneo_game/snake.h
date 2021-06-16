@@ -31,7 +31,8 @@ enum direction { LEFT, RIGHT, UP, DOWN };
 
 class Snake {
 public:
-
+    Snake();
+    ~Snake();
     bool init_snake(void);
     void update_snake(Apple*, Graphics*);
     void change_snake_direction(int);

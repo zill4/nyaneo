@@ -4,37 +4,28 @@
 // struct TailNode *lasttail;
 
 // void push_tail();
-// Snake::Snake()
-// {
-//         snakeHead = (SnakeHead*)malloc(sizeof(struct SnakeHead));
-//         lastTail = (TailNode*)malloc(sizeof(struct TailNode));
-// }
-// Snake::~Snake()
-// {
-//     free(snakeHead);
-//     free(lastTail);
-// }
+ Snake::Snake()
+ {
+         snakeHead = (SnakeHead*)malloc(sizeof(struct SnakeHead));
+         lastTail = (TailNode*)malloc(sizeof(struct TailNode));
+ }
+ Snake::~Snake()
+ {
+     free(snakeHead);
+     free(lastTail);
+ }
 
 bool Snake::init_snake()
 {
     // default direction
     snakeHead->dx = -1;
     snakeHead->dy = 0;
-    // snake.dx = -1;
-    // snake.dy = 0;
 
     // initializes head
     snakeHead->head.rect.x = DEFAULT_X;
     snakeHead->head.rect.y = DEFAULT_Y;
     snakeHead->head.rect.w = DEFAULT_WIDTH;
     snakeHead->head.rect.h = DEFAULT_HEIGHT;
-
-    // snake.head.rect.x = DEFAULT_X;
-    // snake.head.rect.y = DEFAULT_Y;
-    // snake.head.rect.w = DEFAULT_WIDTH;
-    // snake.head.rect.h = DEFAULT_HEIGHT;
-    // snake.head.next = NULL;
-    // snake.head.previous = NULL;
     snakeHead->head.next = NULL;
     snakeHead->head.previous = NULL;
 

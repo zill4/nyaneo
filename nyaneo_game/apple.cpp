@@ -3,6 +3,15 @@
 SDL_Rect apple;
 
 // void generate_new_apple_pos(void);
+Apple::Apple()
+{
+    _apple = new SDL_Rect;
+}
+
+Apple::~Apple()
+{
+    free(_apple);
+}
 
 void Apple::render_apple(Graphics* graphics)
 {
