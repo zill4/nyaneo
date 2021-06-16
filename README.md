@@ -12,9 +12,9 @@ Good guide for setting up enviornment: https://lazyfoo.net/tutorials/SDL/01_hell
 
 # TODOs
 
-- [x] Create a Window 6/14/21
-- [x] Have a pixel move around the screen 6/15/21
-- [ ] Generate a level with boundaries with collision (think PACMAN)
+- [x] Create a Window. 6/14/21
+- [x] Have a pixel move around the screen. 6/15/21
+- [ ] Generate a level with boundaries with collision. (think PACMAN)
 - [ ] Tilemap the levels, create a random tilemap generator. (think Diablo)
 - [ ] Add HUD
 - [ ] Add Title Screen, Exit Screen.
