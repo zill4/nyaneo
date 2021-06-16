@@ -8,7 +8,16 @@ SDL2
 Emscripten
 gcc/g++
 ```
+# Build commands
+need to make changes to Makefile to build for g++
+```
+> Emscripten
+emmake make
 
+> g++
+make
+./game
+```
 # Helpful commands
 
 To build using Emscripten you need to replace gcc with emcc in your makefiles. This is done using emconfigure, which sets the appropriate environment variables like CXX (C++ compiler) and CC (the compiler).
