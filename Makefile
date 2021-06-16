@@ -49,7 +49,7 @@
 NAME = game
 
 #	src / obj files
-SRC	=  main.cpp snake.cpp apple.cpp
+SRC	=  main.cpp snake.cpp apple.cpp graphics.cpp
 OBJ	= $(addprefix $(OBJDIR), $(SRC:.cpp=.o))
 
 #	compiler
@@ -65,6 +65,17 @@ OBJDIR	= ./obj/
 all: obj $(NAME)
 	python3 -m http.server
 
+
+
+# obj:
+# 	mkdir -p $(OBJDIR)
+
+# $(OBJDIR)%.o:$(SRCDIR)%.cpp
+# 	g++ $(CFLAGS) -I $(INCDIR) -o $@ -c $< -lSDL2
+
+# $(NAME): $(OBJ)
+# 	g++ -o game $(OBJ) -lm -lSDL2
+
 obj:
 	mkdir -p $(OBJDIR)
 
@@ -78,6 +89,9 @@ $(NAME): $(OBJ)
 clean:
 		rm -rf $(OBJDIR)
 		rm -r app.js app.html app.wasm
+lclean:
+		rm -rf $(OBJDIR)
+		rm -r game
 fclean:
 		rm -rf $(NAME)
 		make clean

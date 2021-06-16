@@ -34,12 +34,13 @@
 #include "main.h"
 #include "snake.h"
 #include "apple.h"
+#include "graphics.h"
 
-void handle_events(void);
+void handle_events(Snake *snake);
 void quit(void);
 
-SDL_Window *window;
-SDL_Renderer *renderer;
+// SDL_Window *window;
+// SDL_Renderer *renderer;
 SDL_Event e;
 
 bool running = false;
@@ -47,97 +48,127 @@ bool frozen = false;
 
 bool init(void)
 {
-    bool success = true;
-    window = NULL;
-    renderer = NULL;
+    // bool success = true;
+    // window = NULL;
+    // renderer = NULL;
     
     // 1- intialize SDL 2- Initialize game objects.
 
-    if(SDL_Init(SDL_INIT_VIDEO) < 0){
-        printf("SDL could not be initiliazed. SDL_Error: %s\n", SDL_GetError());
-        success = false;
-    }
+    // if(SDL_Init(SDL_INIT_VIDEO) < 0){
+    //     printf("SDL could not be initiliazed. SDL_Error: %s\n", SDL_GetError());
+    //     success = false;
+    // }
 
-    window = SDL_CreateWindow("GameJam Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-    if(!window){
-        printf("SDL_Window could not be initialized. SDL_Error: %s\n", SDL_GetError());
-        success = false;
-    }
-    else{
-        renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);    
-    }
+    // window = SDL_CreateWindow("GameJam Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+    // if(!window){
+    //     printf("SDL_Window could not be initialized. SDL_Error: %s\n", SDL_GetError());
+    //     success = false;
+    // }
+    // else{
+    //     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);    
+    // }
 
-    if(!init_snake()){
-        printf("snake could not be initialized.\n");
-        success = false;
-    }
+    // if(!init_snake()){
+    //     printf("snake could not be initialized.\n");
+    //     success = false;
+    // }
 
-    generate_new_apple_pos();
+    // generate_new_apple_pos();
 
-    running = true;
-    return success;
+    // running = true;
+    // return success;
+    return 0;
 }
 
 void main_loop(void)
 {
-    handle_events();
+    //Graphics may need to be initialized outside of the main loop.
 
-    if(frozen)
+    Graphics *graphics = new Graphics;
+    Snake *snake = new Snake;
+    Apple *apple = new Apple;
+    // Check if graphics initialized ok. should return 0 if not okay.
+    if (graphics->getStatus() == FAIL)
+    {
+        printf("Graphics returned a status %i exiting.\n", graphics->getStatus());
         return;
+    }    
+    if (!snake->init_snake())
+    {
+        printf("Snake could not be initialied.\n");
+        return;
+    }
+    apple->generate_new_apple_pos();
+    running = true;
+    // Start loop
+    while (running)
+    {
+         handle_events(snake);
 
-    SDL_SetRenderDrawColor(renderer, 18, 1, 54, SDL_ALPHA_OPAQUE);
-    SDL_RenderClear(renderer);
+        if(frozen)
+         return;
 
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+        SDL_SetRenderDrawColor(graphics->getRenderer(), 18, 1, 54, SDL_ALPHA_OPAQUE);
+        SDL_RenderClear(graphics->getRenderer());
 
-    update_snake();
-    render_apple();
+        SDL_SetRenderDrawColor(graphics->getRenderer(), 255, 255, 255, SDL_ALPHA_OPAQUE);
 
-    SDL_RenderPresent(renderer);
+        snake->update_snake(apple, graphics);
+        apple->render_apple(graphics);
 
-    SDL_Delay(70);  
+        SDL_RenderPresent(graphics->getRenderer());
+
+        SDL_Delay(70);  
+    }
+    free(&graphics);
+    free(&snake);
+    free(&apple);
+    return;
 }
 
 int main(int argc, char* args[])
 {
-    if(!init())
-        return -1;
-    else
-    {
+    // if(!init())
+    //     return -1;
+    // else
+    // {
 
-        #ifdef __EMSCRIPTEN__
-            emscripten_set_main_loop(main_loop, 0, 1);
-        #endif
+    #ifdef __EMSCRIPTEN__
+        emscripten_set_main_loop(main_loop, 0, 1);
+    #endif
 
-        #ifndef __EMSCRIPTEN__
-            while(running)
-                main_loop();
-        #endif
-    }
+    #ifdef __EMSCRIPTEN__
+        while(running)
+            main_loop();
+    #endif
+    // }
+    #ifdef __EMSCRIPTEN__
+        emscripten_cancel_main_loop();
+    #endif
     
-    quit_game();
+   // quit_game();
     return 0;
 }
 
-void handle_events()
+void handle_events(Snake *snake)
 {
     while(SDL_PollEvent(&e) != 0){
         if(e.type == SDL_QUIT){
-            quit_game();
+            running = false;
         }
         else if(e.type == SDL_KEYDOWN){
             switch(e.key.keysym.sym){
                 case SDLK_RIGHT:
-                    change_snake_direction(RIGHT);
+                    snake->change_snake_direction(RIGHT);
                     break;
                 case SDLK_LEFT:
-                    change_snake_direction(LEFT);
+                    snake->change_snake_direction(LEFT);
                     break;
                 case SDLK_UP:
-                    change_snake_direction(UP);
+                   snake->change_snake_direction(UP);
                     break;
                 case SDLK_DOWN:
-                    change_snake_direction(DOWN);
+                    snake->change_snake_direction(DOWN);
                     break;
             }
         }
@@ -146,18 +177,18 @@ void handle_events()
 
 void quit_game(void)
 {
-    SDL_DestroyWindow(window);
-    window = NULL;
+    // SDL_DestroyWindow(window);
+    // window = NULL;
 
-    SDL_DestroyRenderer(renderer);
-    renderer = NULL;
+    // SDL_DestroyRenderer(renderer);
+    // renderer = NULL;
 
-    // free_tails();
-    SDL_Quit();
+    // // free_tails();
+    // SDL_Quit();
 
-    #ifdef __EMSCRIPTEN__
-        emscripten_cancel_main_loop();
-    #endif
+    // #ifdef __EMSCRIPTEN__
+    //     emscripten_cancel_main_loop();
+    // #endif
 }
 
 void set_freeze(bool b)
@@ -165,7 +196,7 @@ void set_freeze(bool b)
     frozen = b;
 }
 
-SDL_Renderer* getRenderer()
-{ 
-    return renderer; 
-}
+// SDL_Renderer* getRenderer()
+// { 
+//     return renderer; 
+// }

@@ -1,31 +1,45 @@
-#include <stdio.h>
-#include <stdbool.h>
-#include <math.h>
 #include "snake.h"
-#include "main.h"
-#include "apple.h"
 
-struct Snake snake;
-struct TailNode *lasttail;
+// struct Snake snake;
+// struct TailNode *lasttail;
 
-void push_tail();
+// void push_tail();
+// Snake::Snake()
+// {
+//         snakeHead = (SnakeHead*)malloc(sizeof(struct SnakeHead));
+//         lastTail = (TailNode*)malloc(sizeof(struct TailNode));
+// }
+// Snake::~Snake()
+// {
+//     free(snakeHead);
+//     free(lastTail);
+// }
 
-bool init_snake()
+bool Snake::init_snake()
 {
     // default direction
-    snake.dx = -1;
-    snake.dy = 0;
+    snakeHead->dx = -1;
+    snakeHead->dy = 0;
+    // snake.dx = -1;
+    // snake.dy = 0;
 
     // initializes head
-    snake.head.rect.x = DEFAULT_X;
-    snake.head.rect.y = DEFAULT_Y;
-    snake.head.rect.w = DEFAULT_WIDTH;
-    snake.head.rect.h = DEFAULT_HEIGHT;
-    snake.head.next = NULL;
-    snake.head.previous = NULL;
+    snakeHead->head.rect.x = DEFAULT_X;
+    snakeHead->head.rect.y = DEFAULT_Y;
+    snakeHead->head.rect.w = DEFAULT_WIDTH;
+    snakeHead->head.rect.h = DEFAULT_HEIGHT;
+
+    // snake.head.rect.x = DEFAULT_X;
+    // snake.head.rect.y = DEFAULT_Y;
+    // snake.head.rect.w = DEFAULT_WIDTH;
+    // snake.head.rect.h = DEFAULT_HEIGHT;
+    // snake.head.next = NULL;
+    // snake.head.previous = NULL;
+    snakeHead->head.next = NULL;
+    snakeHead->head.previous = NULL;
 
     // sets pointer of last tail to head
-    lasttail = &snake.head;
+    lastTail = &snakeHead->head;
 
     // pushes default tails
     for(int i = 0; i < DEFAULT_TAILS_N; ++i)
@@ -35,53 +49,53 @@ bool init_snake()
 }
 
 
-void render_tail(SDL_Rect *tail)
+void Snake::render_tail(SDL_Rect *tail, Graphics *graphics)
 {   // renders individual parts of the snake
-    SDL_SetRenderDrawColor(getRenderer(), 252, 191, 30, SDL_ALPHA_OPAQUE);
-    SDL_RenderFillRect(getRenderer(), tail);
+    SDL_SetRenderDrawColor(graphics->getRenderer(), 252, 191, 30, SDL_ALPHA_OPAQUE);
+    SDL_RenderFillRect(graphics->getRenderer(), tail);
 }
 
-void check_collision()
+void Snake::check_collision(Apple *apple)   
 {
     // fruit collision
-    if(abs(snake.head.rect.x - get_apple_posX()) < DEFAULT_WIDTH && abs(snake.head.rect.y - get_apple_posY()) < DEFAULT_HEIGHT){
+    if(abs(snakeHead->head.rect.x - apple->get_apple_posX()) < DEFAULT_WIDTH && abs(snakeHead->head.rect.y - apple->get_apple_posY()) < DEFAULT_HEIGHT){
         push_tail();
-        generate_new_apple_pos();
+        apple->generate_new_apple_pos();
     }
 
     // border collision
-    if(snake.head.rect.x > SCREEN_WIDTH - DEFAULT_WIDTH)
-        snake.head.rect.x = 0;
-    else if(snake.head.rect.x < 0 - DEFAULT_WIDTH)
-        snake.head.rect.x = SCREEN_WIDTH;
-    else if(snake.head.rect.y < 0 - DEFAULT_HEIGHT)
-        snake.head.rect.y = SCREEN_HEIGHT;
-    else if(snake.head.rect.y > SCREEN_HEIGHT - DEFAULT_HEIGHT)
-        snake.head.rect.y = 0;
+    if(snakeHead->head.rect.x > SCREEN_WIDTH - DEFAULT_WIDTH)
+        snakeHead->head.rect.x = 0;
+    else if(snakeHead->head.rect.x < 0 - DEFAULT_WIDTH)
+        snakeHead->head.rect.x = SCREEN_WIDTH;
+    else if(snakeHead->head.rect.y < 0 - DEFAULT_HEIGHT)
+        snakeHead->head.rect.y = SCREEN_HEIGHT;
+    else if(snakeHead->head.rect.y > SCREEN_HEIGHT - DEFAULT_HEIGHT)
+        snakeHead->head.rect.y = 0;
 }
 
-void update_snake(void)
+void Snake::update_snake(Apple *apple, Graphics *graphics)
 {   // iterates over the head and the tail
-    for(struct TailNode *ptr = lasttail; ptr != NULL; ptr = (*ptr).previous){
+    for(struct TailNode *ptr = lastTail; ptr != NULL; ptr = (*ptr).previous){
         if((*ptr).previous == NULL){ // in other words, if this "tail" is the head
-            snake.head.rect.x += snake.dx * DEFAULT_WIDTH;
-            snake.head.rect.y += snake.dy * DEFAULT_HEIGHT;
+            snakeHead->head.rect.x += snakeHead->dx * DEFAULT_WIDTH;
+            snakeHead->head.rect.y += snakeHead->dy * DEFAULT_HEIGHT;
         } else { // if it's the snake's body
-            if(abs(snake.head.rect.x - (*ptr).rect.x) < DEFAULT_WIDTH && // checks collision with the head
-              abs(snake.head.rect.y - (*ptr).rect.y) < DEFAULT_HEIGHT)
+            if(abs(snakeHead->head.rect.x - (*ptr).rect.x) < DEFAULT_WIDTH && // checks collision with the head
+              abs(snakeHead->head.rect.y - (*ptr).rect.y) < DEFAULT_HEIGHT)
                quit_game();
 
             (*ptr).rect.x = (*ptr).previous->rect.x;
             (*ptr).rect.y = (*ptr).previous->rect.y;
         }
 
-        render_tail(&(*ptr).rect);
+        render_tail(&(*ptr).rect, graphics);
     }
 
-    check_collision(); // head-only collision (fruit, border, etc.)
+    check_collision(apple); // head-only collision (fruit, border, etc.)
 }
 
-void push_tail()
+void Snake::push_tail()
 {   // pushes a new tail inside the linked list
     struct TailNode *new_tail = (TailNode*)malloc(sizeof(struct TailNode));
     if(new_tail == NULL) 
@@ -91,37 +105,37 @@ void push_tail()
     (*new_tail).rect.h = DEFAULT_HEIGHT;
 
     (*new_tail).next = NULL;
-    (*new_tail).previous = lasttail;
+    (*new_tail).previous = lastTail;
 
-    (*lasttail).next = new_tail;
-    lasttail = new_tail;
+    (*lastTail).next = new_tail;
+    lastTail = new_tail;
 }
 
-void change_snake_direction(int dir)
+void Snake::change_snake_direction(int dir)
 {
-    if(dir == RIGHT && snake.dx != -1){
-        snake.dx = 1;
-        snake.dy = 0;
+    if(dir == RIGHT && snakeHead->dx != -1){
+        snakeHead->dx = 1;
+        snakeHead->dy = 0;
     }
-    else if(dir == LEFT && snake.dx != 1){
-        snake.dx = -1;
-        snake.dy = 0;
+    else if(dir == LEFT && snakeHead->dx != 1){
+        snakeHead->dx = -1;
+        snakeHead->dy = 0;
     }
-    else if(dir == UP && snake.dy != 1){
-        snake.dy = -1;
-        snake.dx = 0;
+    else if(dir == UP && snakeHead->dy != 1){
+        snakeHead->dy = -1;
+        snakeHead->dx = 0;
     }
-    else if(dir == DOWN && snake.dy != -1){
-        snake.dy = 1;
-        snake.dx = 0;
+    else if(dir == DOWN && snakeHead->dy != -1){
+        snakeHead->dy = 1;
+        snakeHead->dx = 0;
     }
 }
 
-void free_tails()
+void Snake::free_tails()
 {
     struct TailNode *tmp;
     struct TailNode *secondtail;
-    secondtail = snake.head.next; // we skip the first node (head) because it's allocated in the stack
+    secondtail = snakeHead->head.next; // we skip the first node (head) because it's allocated in the stack
 
     while(secondtail != NULL){
         tmp = secondtail;
