@@ -31,11 +31,5 @@ emmake make
 emcc [-Ox] project.o -o project.js
 ```
 
-Activate PATH and other environment variables in the current terminal
-
-```
-Activate PATH and other environment variables in the current terminal
-source ./emsdk_env.sh
-```
 
 
