@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\nyaneo_game"
+    "\\nyaneo_game",
+    "\\nyaneo_game\\x64",
+    "\\nyaneo_game\\x64\\Debug"
   ],
   "SelectedNode": "\\nyaneo_game\\nyaneo_game.sln",
   "PreviewInSolutionExplorer": false
