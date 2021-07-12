@@ -11,6 +11,8 @@
 #include "LTexture.h"
 
 enum direction { LEFT, RIGHT, UP, DOWN };
+//Walking animation
+const int WALKING_ANIMATION_FRAMES = 4;
 
 class PlayerCharacter {
 public:
@@ -21,9 +23,10 @@ public:
     void change_direction(int);
     void check_collision(Apple*);
     void sprite_renderer(SDL_Rect*, Graphics*);
-
+    bool loadMedia();
 private:
-    LTexture gSpriteSheetTexture;
+    LTexture spriteSheetTexture;
+    SDL_Rect spriteClips[WALKING_ANIMATION_FRAMES];
 };
 
 

@@ -75,7 +75,7 @@ void Snake::update_snake(Apple* apple, Graphics* graphics)
         else { // if it's the snake's body
             if (abs(snakeHead->head.rect.x - (*ptr).rect.x) < DEFAULT_WIDTH && // checks collision with the head
                 abs(snakeHead->head.rect.y - (*ptr).rect.y) < DEFAULT_HEIGHT)
-                quit_game();
+               /* quit_game();*/
 
             (*ptr).rect.x = (*ptr).previous->rect.x;
             (*ptr).rect.y = (*ptr).previous->rect.y;
@@ -90,8 +90,8 @@ void Snake::update_snake(Apple* apple, Graphics* graphics)
 void Snake::push_tail()
 {   // pushes a new tail inside the linked list
     struct TailNode* new_tail = (TailNode*)malloc(sizeof(struct TailNode));
-    if (new_tail == NULL)
-        quit_game();
+    //if (new_tail == NULL)
+    //    quit_game();
 
     (*new_tail).rect.w = DEFAULT_WIDTH;
     (*new_tail).rect.h = DEFAULT_HEIGHT;

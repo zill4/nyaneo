@@ -2,9 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\nyaneo_game",
-    "\\nyaneo_game\\x64",
-    "\\nyaneo_game\\x64\\Debug"
+    "\\nyaneo_game\\x64"
   ],
-  "SelectedNode": "\\nyaneo_game\\nyaneo_game.sln",
+  "SelectedNode": "\\nyaneo_game\\LTexture.h",
   "PreviewInSolutionExplorer": false
 }

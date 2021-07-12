@@ -15,6 +15,7 @@ SDL_Event e;
 void main_loop(void)
 {
     int running = false;
+    bool success = true;
     //Graphics may need to be initialized outside of the main loop.
 
     Graphics* graphics = new Graphics;
@@ -55,7 +56,6 @@ void main_loop(void)
 
 int main(int argc, char* args[])
 {
- 
     main_loop();
     return 0;
 }

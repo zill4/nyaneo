@@ -6,8 +6,9 @@
 
 #include <SDL.h>
 #include <stdio.h>
+#include <SDL_image.h>
 
-enum graphicsStatus { FAIL, SUCCESS, OTHER }; // TODO: Need to define other status codes and describe.
+enum graphicsStatus { FAIL, SUCCESS }; // TODO: Need to define other status codes and describe.
 
 class Graphics
 {
